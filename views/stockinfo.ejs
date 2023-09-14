@@ -1,0 +1,116 @@
+<%- include('partials/header'); -%>
+    <br>
+    <br>
+    <div class="container">
+        <a class="btn btn-secondary" href="/stocks" role="button">Back</a>
+        <div class="row justify-content-md-center">
+            <div class="col-sm-4">
+                <div class="card text-center">
+                    <h5 class="card-title">
+                        <%= stockname %> stock data</h5>
+                </div>
+            </div>
+        </div>
+        <br>
+        <table class="table table-bordered table-striped ">
+            <thead>
+                <tr bgcolor="8C06E3" style="text-align:center">
+                    <th scope="col">Property</th>
+                    <th scope="col">Our Rating</th>
+                </tr>
+            </thead>
+            <tbody style="text-align:center">
+                <tr>
+                    <td>Discounted Cash Flow</td>
+                    <td>
+                        <%= result['dcfscore']%> / 5</td>
+                </tr>
+                <tr>
+                    <td>Return on Assets</td>
+                    <td>
+                        <%= result['roascore']%> / 5</td>
+                </tr>
+                <tr>
+                    <td>Return on Equity</td>
+                    <td>
+                        <%= result['roescore']%> / 5</td>
+                </tr>
+                <tr>
+                    <td>Price to Book Ratio</td>
+                    <td>
+                        <%= result['pbscore']%> / 5</td>
+                </tr>
+                <tr>
+                    <td>Price to Equity Ratio</td>
+                    <td>
+                        <%= result['pescore']%> / 5</td>
+                </tr>
+                <tr>
+                    <td>Debt to Equity Ratio</td>
+                    <td>
+                        <%= result['descore']%> / 5</td>
+                </tr>
+                <% if (result['dyscore'] !=0){ %>
+                    <td>Dividend Yield / Avgerage Dividend Yield of previous years</td>
+                    <td>
+                        <%=result['dyscore']*0.25%> / 5</td>
+                    <% } %>
+                        <tr>
+                            <td class="table-dark">Overall Rating</td>
+                            <td class="table-dark">
+                                <%=result['total']%> / 5</td>
+                        </tr>
+            </tbody>
+        </table>
+        <br>
+        <div class="container">
+            <form action="/stocks/<%= stockname %>" method="post">
+                <div class="form-group">
+                    <label for="Inputnum">Enter the number of days for which you wish to fetch this stock's price</label>
+                    <input type="number" class="form-control" id="Inputnum" name="Inputnum" placeholder="Enter days">
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+        <br>
+        <% if (data!="nody" ){%>
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr bgcolor="8C06E3">
+                        <th scope="col">Date</th>
+                        <th scope="col">Volume</th>
+                        <th scope="col">Open</th>
+                        <th scope="col">Close</th>
+                        <th scope="col">Change</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% data["historical"].map((x)=>{ %>
+                        <tr>
+                            <td>
+                                <%= x["date"] %>
+                            </td>
+                            <td>
+                                <%= x["volume"] %>
+                            </td>
+                            <td>
+                                <%= x["open"] %>
+                            </td>
+                            <td>
+                                <%= x["close"] %>
+                            </td>
+                            <% if (x["change"]<0){ %>
+                                <td style="background-color:#F82A2A">
+                                    <%= x["changePercent"] %> %</td>
+                                <%} else {%>
+                                    <td style="background-color:#2EEF10">
+                                        <%= x["changePercent"] %> %</td>
+                                    <% }%>
+                        </tr>
+                        <% }) %>
+                </tbody>
+            </table>
+            <% } %>
+    </div>
+
+    <%- include('partials/footer'); -%>
